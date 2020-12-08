@@ -1,0 +1,15 @@
+START: A woman paddling on a surfboard
+STORY: Maria sat on her surf board, as it bobbed up and down on the coastal waves. The neon lights of Ocean Drive burned on the shore in the distance, like green and pink embers. It was just her, the water, and whatever starlight got past the Miami light pollution.
+
+ANCHOR:  A shark swimming in the ocean
+STORY: She was paddling back to shore when she saw something under the water. At first she thought it was a manatee or a dolphin. She’d occasionally seen those swimming around here, spent countless hours watching them under the night sky. But this was different. 
+
+CONTINUE: 
+A bright spotlight shown down on Maria. “Get out of the water!” A gruff voice shouted. Maria looked up, and saw a small fishing trolley, floating half-way between her and the shoreline. A stout man in an orange rain coat and fishing boots stood on the deck.
+
+CONTINUE: 
+Maria's eyes went wide. She turned and saw the large dorsal fin sticking out of the water. The shark’s body hovered just under the surface like a dark cloud. Maria’s hands dove into the water, paddling faster than she’d ever paddled in her life. Her legs kicked frantically. And she had strength and determination beyond that of most people.
+
+CONTINUE:
+She hoped it would be enough. “Look out!” The fisherman cried. Maria turned just in time to see the shark chomp down on the tail of her surfboard. She pushed herself off the board, and into the cold dark water. 
+
