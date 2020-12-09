@@ -1,0 +1,90 @@
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+<script src="{{
+  url_for('static', filename='js/script.js') }}"></script>
+<title>Image Captioning</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+</style>
+</head>
+<body>
+ <h3>Image 2 Story : Create an immersive story from Image(s), using Image Captioning model and and then feeding these captions to GPT-3</h3>
+<div class="file-upload">
+  <div class ="file-upload-col left">
+
+    <form action="/predict/1" method="POST" enctype="multipart/form-data">
+    <div class="image-upload-wrap">
+      <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" name='image-input'/>
+      <div class="drag-text">
+        <h3>Drag and Drop image for story</h3>
+      </div>
+    </div>
+
+    <div class="file-upload-content">
+      <img class="file-upload-image" src="#" alt="your image" />
+      <div class="image-title-wrap left">
+        <button type="submit" class="remove-image" id="new-image" name="image_button" value="new-image" >New Story using image</button>
+      </div>
+      <div class="image-title-wrap right">
+        <button type="submit" class="remove-image" id="continue-image" name="image_button" value="continue-image">Continue Story using image</button>
+      </div>
+    </div>
+    </form>
+    <br></br>
+    <form action="/predict/4" method="POST" enctype="multipart/form-data">
+    <div class="input-text-content">
+      <textarea id="gpt-input-text" name="inputtext" rows="4" cols="50" class="input-text-wrap">
+      </textarea>
+      <div class="image-title-wrap">
+        <button type="submit" class="remove-image" id="continue-text" onclick="getText(this);" >Continue story using text</button>
+      </div>
+    </div>
+    </form>
+
+    <br></br>
+    <br></br>
+
+    <form action="/predict/3" method="POST" enctype="multipart/form-data">
+    <div class="continue-story-content">
+      <div class="image-title-wrap">
+        <button type="submit" class="remove-image" id="continue-no-input" >Continue story with GPT-3</button>
+      </div>
+    </div>
+    </form>
+
+  </div> 
+
+  <div class ="file-upload-col right">
+    {% if result %}
+    <div>
+      <img  src={{ url_for('static', filename='download.jpeg') }} alt="your image" id ="result-image" class="fit-image" ></img>  
+    </div>
+    <h3>Caption:</h3>
+
+    <div class ="result-caption">
+      {{result}}
+    </div>
+
+    <h3> GPT Summary:</h3>
+
+    <div class ="result-gpt">
+      {{summary}}   
+    </div> 
+    {% endif %}
+  </div>
+</form>
+
+ 
+  
+</body>
+</html>
