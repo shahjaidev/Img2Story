@@ -1,3 +1,4 @@
+Here is an award winning short story:
 START: A woman paddling on a surfboard***
 STORY: Maria sat on her surfboard, as it bobbed up and down on the coastal waves. The neon lights of Ocean Drive burned on the shore in the distance, like green and pink embers. It was just her, the water, and whatever starlight got past the Miami light pollution.***
 
@@ -15,7 +16,7 @@ She hoped it would be enough. “Look out!” The fisherman cried. Maria turned 
 
 
 
-
+Here is an award winning short story:
 START: a picture of a person riding a motorcycle***
 STORY:  Raghav stepped onto his motorcycle in the parking lot behind the bar. He tucked her dark hair into her helmet and pulled on her gloves. She could already feel the wind against her face. It was perfect weather for a ride: clear skies, a gentle ocean breeze, and almost no traffic on the roads at this time of night. It was 2050 and motorcycles could fly over the road. ***
 
@@ -23,5 +24,7 @@ ANCHOR: a baseball player is holding a baseball bat***
 STORY: He drove his motorcycle into the field behind his apartment. It was late, but he didn’t mind. He brought out his baseball bat and started to practice his swing. He breathed in the fresh air and thought about the big game tomorrow. ***
 
 
+
+Here is an award winning short story:
 START: A man sitting on a bench.***
 STORY: James sat silently on the bench deep in thought. He was the picture of luxury. He had on an exquisite suit, a necktie tied in a navy-stripe bow, a well-tailored black leather jacket with leather strips tightly tapered to the bel and new soft leather shoes with tight, black laces.***

@@ -21,9 +21,9 @@ def new_story_with_caption(caption, temperature = 0.84):
     display_story_file=open(display_story_file_path, "w+") 
 
     original_prompt = prompt_file.read()
-    constructed_prompt= "START: "+ caption
+    constructed_prompt=  "Here is an award winning short story:\n"+"START: "+ caption
     #only when we fed in a new image
-    pass_prompt = original_prompt +"\n\n\n" + constructed_prompt 
+    pass_prompt = original_prompt +"\n\n\n\n" + constructed_prompt 
     
     response = openai.Completion.create(engine="babbage", prompt=pass_prompt, max_tokens=150, stop=['\n\n'])
     
@@ -60,7 +60,7 @@ def continue_story_with_caption(caption, temperature = 0.84):
     constructed_prompt= "\n\n"+"ANCHOR: "+ caption
     
     #only when we fed in a new image
-    pass_prompt = original_prompt +"\n\n\n" + story_so_far+ constructed_prompt 
+    pass_prompt = original_prompt +"\n\n\n\n" + story_so_far+ constructed_prompt 
 
     print(pass_prompt)
     
@@ -95,7 +95,7 @@ def continue_story_without_caption(temperature = 0.84):
     constructed_prompt= "\n\n"+ "CONTINUE: "
 
     #Continue option is chosen by user
-    pass_prompt = original_prompt +"\n\n\n" + story_so_far+ constructed_prompt 
+    pass_prompt = original_prompt +"\n\n\n\n" + story_so_far+ constructed_prompt 
     
     response = openai.Completion.create(engine="babbage", prompt=pass_prompt, max_tokens=150, stop=['\n\n'])
     
@@ -129,7 +129,7 @@ def continue_story_with_text(user_text, temperature = 0.84):
     
 
     #only when we fed in a new image
-    pass_prompt = original_prompt +"\n\n\n" + story_so_far+ user_text 
+    pass_prompt = original_prompt +"\n\n\n\n" + story_so_far+ user_text 
     
     response = openai.Completion.create(engine="babbage", prompt=pass_prompt, max_tokens=150, stop=['\n\n'])
     
