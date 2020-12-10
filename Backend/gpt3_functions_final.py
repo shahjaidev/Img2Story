@@ -127,12 +127,12 @@ def continue_story_with_text(user_text, temperature = 0.73):
     return continue_story_with_caption(user_text)
 
 
-caption= "A couple of cars on the street"
+caption= "A man on a motorcycle"
 
 
-#new_story_with_caption(caption)
+new_story_with_caption(caption)
 
-continue_story_with_caption(caption)
+#continue_story_with_caption(caption)
 
 #continue_story_without_caption()
 
