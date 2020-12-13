@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 import torchvision
+from torchvision.models.mobilenet import mobilenet_v2
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -15,11 +16,15 @@ class Encoder(nn.Module):
         self.enc_image_size = encoded_image_size
         
         # We use a ResNet-101 model pretrained on ImageNet as the encoder
-        resnet = torchvision.models.resnet101(pretrained=True)  
+        # resnet = torchvision.models.resnet101(pretrained=True)  
+        mobilenet = torchvision.models.mobilenet_v2(pretrained=True)
 
         # Cutting off last two layers before finetuning 
-        modules = list(resnet.children())[:-2]
+        # modules = list(resnet.children())[:-2]
+        modules = list(mobilenet.children())[:-1]
         self.resnet = nn.Sequential(*modules)
+
+        self.conv1 = nn.Conv2d(1280, 2048, 1)
 
         # Resize image to fixed size to allow input images of variable size
         self.adaptive_pool = nn.AdaptiveAvgPool2d((encoded_image_size, encoded_image_size))
@@ -34,6 +39,7 @@ class Encoder(nn.Module):
         :return: encoded images
         """
         out = self.resnet(images)  # (batch_size, 2048, image_size/32, image_size/32)
+        out = self.conv1(out)  # (batch_size, 2048, image_size/32, image_size/32)
         out = self.adaptive_pool(out)  # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = out.permute(0, 2, 3, 1)  # (batch_size, encoded_image_size, encoded_image_size, 2048)
         return out
@@ -82,6 +88,9 @@ class Attention(nn.Module):
 
         return attention_weighted_encoding, alpha
 
+def create_word_embedding():
+    
+    pass
 
 class DecoderWithAttention(nn.Module):
     """
