@@ -29,7 +29,7 @@ PROMPT_TAG= "[[Prompt]]:"
 STORY_TAG= "[[Story]]:"
 
 
-def new_story_with_caption(caption, temperature = 0.73):
+def new_story_with_caption(caption, temperature = 0.80):
 
     story_prompt_file= open(story_prompt_file_path, "w+") 
     stored_story_file= open(stored_story_file_path,'w+')
@@ -37,9 +37,11 @@ def new_story_with_caption(caption, temperature = 0.73):
     constructed_prompt=  "Here is an award winning short story:"+ "\n"+ PROMPT_TAG+ caption + "."+'\n'
     pass_prompt = orig_prompt +"\n\n\n" + constructed_prompt 
     
-    response = openai.Completion.create(engine="davinci",temperature=temperature, prompt=pass_prompt, max_tokens=330, stop=['\n\n','\n\n\n',PROMPT_TAG])
+    response = openai.Completion.create(engine="davinci",temperature=temperature, prompt=pass_prompt, max_tokens=330, presence_penalty =0.05, stop=['\n\n','\n\n\n',PROMPT_TAG])
     
     reply = response["choices"][0]["text"]  
+    print(f"the type of the response is {type(reply)}")
+    #reply = reply.decode('utf-8')
     reply=reply.strip('\n')
     reply=reply.strip()
 
@@ -57,7 +59,7 @@ def new_story_with_caption(caption, temperature = 0.73):
     return reply_clean
 
 #When user chooses to continue the story through uploading an image
-def continue_story_with_caption(caption, temperature = 0.73):
+def continue_story_with_caption(caption, temperature = 0.8):
  
     story_prompt_file= open(story_prompt_file_path, "r") 
     story_so_far= story_prompt_file.read().strip('\n')
@@ -68,7 +70,7 @@ def continue_story_with_caption(caption, temperature = 0.73):
     #print("CONSTRUCTED"+ constructed_prompt)
     pass_prompt = orig_prompt +"\n\n\n" + constructed_prompt 
     
-    response = openai.Completion.create(engine="davinci", prompt=pass_prompt, temperature=temperature, max_tokens=330, stop=['\n\n','\n\n\n',PROMPT_TAG])
+    response = openai.Completion.create(engine="davinci", prompt=pass_prompt, temperature=temperature, max_tokens=330, presence_penalty=0.05, stop=['\n\n','\n\n\n',PROMPT_TAG])
     
     reply = response["choices"][0]["text"]
     reply=reply.strip('\n')
@@ -99,8 +101,10 @@ def continue_story_without_caption(temperature = 0.8):
 
 
     pass_prompt = orig_prompt +"\n\n\n" + story_so_far 
+
+    print(f"the pass prompt is {pass_prompt}")
     
-    response = openai.Completion.create(engine="davinci", prompt=pass_prompt,temperature=temperature, max_tokens=400, stop=['\n\n','\n\n\n',PROMPT_TAG])
+    response = openai.Completion.create(engine="davinci", prompt=pass_prompt,temperature=temperature, presence_penalty=0.05, max_tokens=400, stop=['\n\n','\n\n\n',PROMPT_TAG])
     
     reply = response["choices"][0]["text"]  
     print(reply)
@@ -123,7 +127,7 @@ def continue_story_without_caption(temperature = 0.8):
 
 
 #User chooses to pass some text as input for continuing the story. 
-def continue_story_with_text(user_text, temperature = 0.73):
+def continue_story_with_text(user_text, temperature = 0.55):
     return continue_story_with_caption(user_text)
 
 

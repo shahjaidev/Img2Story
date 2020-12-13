@@ -24,10 +24,10 @@ def hello():
 
 @app.route('/predict/<int:choice>', methods=["GET", "POST"])
 def predict(choice):
+	f = None
+	caption= None
+	summary = None
 	if request.method == 'POST':
-		f = None
-		caption= None
-		summary = None
 
 		if choice==1 or choice==2: # new story on image upload
 			f = request.files['image-input']
@@ -36,8 +36,10 @@ def predict(choice):
 			#if choice ==1:
 			if request.form['image_button'] == 'new-image':
 				summary=new_story_with_caption(caption)
+				print(summary)
 			else:
 				summary=continue_story_with_caption(caption)
+				print(summary)
 		elif choice ==3: # continue story without image
 			caption=" "
 			summary=continue_story_without_caption()
