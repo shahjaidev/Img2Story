@@ -2,6 +2,10 @@ import torch
 from torch import nn
 import torchvision
 from torchvision.models.mobilenet import mobilenet_v2
+import json 
+import numpy as np
+import bcolz 
+import pickle
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -89,8 +93,32 @@ class Attention(nn.Module):
         return attention_weighted_encoding, alpha
 
 def create_word_embedding():
-    
-    pass
+    vectors = bcolz.open(f'./Glove/6B.300.dat')[:]
+    words = pickle.load(open(f'./Glove/6B.300_words.pkl', 'rb'))
+    word2idx = pickle.load(open(f'./Glove/6B.300_idx.pkl', 'rb'))
+
+    glove = {w: vectors[word2idx[w]] for w in words}
+    with open('./caption_data/WORDMAP_coco_5_cap_per_img_5_min_word_freq.json', 'r') as j:
+        target_vocab = json.load(j)
+    matrix_len = len(target_vocab)
+    weights_matrix = np.zeros((matrix_len, 300))
+    words_found = 0
+
+    for i, word in enumerate(target_vocab):
+        word = word.lower()
+        try: 
+            weights_matrix[i] = glove[word]
+            words_found += 1
+        except KeyError:
+            weights_matrix[i] = np.random.normal(scale=0.6, size=(300, ))
+
+    emb_layer = nn.Embedding(len(target_vocab),300)
+    weights_matrix = torch.tensor(weights_matrix)
+    emb_layer.load_state_dict({'weight': weights_matrix})
+
+    return emb_layer
+
+
 
 class DecoderWithAttention(nn.Module):
     """
@@ -117,7 +145,8 @@ class DecoderWithAttention(nn.Module):
 
         self.attention = Attention(encoder_dim, decoder_dim, attention_dim)  # attention network
 
-        self.embedding = nn.Embedding(vocab_size, embed_dim)  # embedding layer
+        # self.embedding = nn.Embedding(vocab_size, embed_dim)  # embedding layer
+        self.embedding = create_word_embedding() 
         self.dropout = nn.Dropout(p=self.dropout)
         self.decode_step = nn.LSTMCell(embed_dim + encoder_dim, decoder_dim, bias=True)  # decoding LSTMCell
         self.init_h = nn.Linear(encoder_dim, decoder_dim)  # linear layer to find initial hidden state of LSTMCell
@@ -131,7 +160,7 @@ class DecoderWithAttention(nn.Module):
         """
         Initializes some parameters with values from the uniform distribution, for easier convergence.
         """
-        self.embedding.weight.data.uniform_(-0.1, 0.1)
+        # self.embedding.weight.data.uniform_(-0.1, 0.1)
         self.fc.bias.data.fill_(0)
         self.fc.weight.data.uniform_(-0.1, 0.1)
 

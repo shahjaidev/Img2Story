@@ -57,9 +57,9 @@ class CaptionDataset(Dataset):
 data_folder = './caption_data'  
 data_name = 'coco_5_cap_per_img_5_min_word_freq'
 
-emb_dim = 512  
-attention_dim = 512  
-decoder_dim = 512  
+emb_dim = 300  
+attention_dim = 300  
+decoder_dim = 300  
 dropout = 0.5
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 cudnn.benchmark = True  

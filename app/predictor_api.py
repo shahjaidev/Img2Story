@@ -16,8 +16,9 @@ from PIL import Image
 def make_prediction():
     device = torch.device("cpu")
 
+
     # Load model
-    checkpoint = torch.load('../tutorial/pretrained.pth.tar', map_location=str(device))
+    checkpoint = torch.load('../Model/resnet.pth.tar', map_location=str(device))
     decoder = checkpoint['decoder']
     decoder = decoder.to(device)
     decoder.eval()
@@ -26,24 +27,14 @@ def make_prediction():
     encoder.eval()
 
     # Load word map (word2ix)
-    with open('../tutorial/pretrained_wordmap.json', 'r') as j:
+    with open('../Model/pretrained_wordmap.json', 'r') as j:
         word_map = json.load(j)
     rev_word_map = {v: k for k, v in word_map.items()}  # ix2word
 
     image_path = './static/download.jpeg'
-    beam_size = 5
+    beam_size = 6
 
 
-    """
-    Reads an image and captions it with beam search.
-
-    :param encoder: encoder model
-    :param decoder: decoder model
-    :param image_path: path to image
-    :param word_map: word map
-    :param beam_size: number of sequences to consider at each decode-step
-    :return: caption, weights for visualization
-    """
 
     k = beam_size
     vocab_size = len(word_map)
@@ -59,12 +50,10 @@ def make_prediction():
     img = img.transpose(2, 0, 1)
     img = img / 255
     img = torch.FloatTensor(img).to(device)
-    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                    std=[0.229, 0.224, 0.225])
+    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
     transform = transforms.Compose([normalize])
     image = transform(img)  # (3, 256, 256)
-    # temp = image.transpose(1,2,3)
-    # plt.imshow(temp)
+
 
     # Encode
     image = image.unsqueeze(0)  # (1, 3, 256, 256)
