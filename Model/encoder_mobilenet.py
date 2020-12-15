@@ -8,10 +8,10 @@ import bcolz
 import pickle
 
 
-class Encoder(nn.Module):
+class EncoderMobilenet(nn.Module):
 
     def __init__(self, encoded_image_size=14):
-        super(Encoder, self).__init__()
+        super(EncoderMobilenet, self).__init__()
         self.enc_image_size = encoded_image_size
         
 
@@ -36,7 +36,8 @@ class Encoder(nn.Module):
 
         for p in self.encoder_net.parameters():
             p.requires_grad = False
-        # If fine-tuning, only fine-tune convolutional blocks 2 through 4
-        for c in list(self.encoder_net.children())[5:]:
+        
+        children= list(self.encoder_net.children())
+        for c in children[0][12:]:
             for p in c.parameters():
                 p.requires_grad = fine_tune

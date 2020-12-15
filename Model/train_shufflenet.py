@@ -6,7 +6,9 @@ import torchvision.transforms as transforms
 from torch import nn
 from torch.nn.utils.rnn import pack_padded_sequence
 # from models import Encoder, DecoderWithAttention
-from encoder import Encoder
+from encoder_mobilenet import EncoderMobilenet
+from encoder_shufflenet import EncoderShufflenet
+from encoder_squeezenet import EncoderSqueezenet
 from decoder_with_attention import DecoderWithAttention
 from utils import AverageMeter, accuracy
 from nltk.translate.bleu_score import corpus_bleu
@@ -77,7 +79,7 @@ grad_clip = 5.
 alpha_c = 1.
 best_bleu4 = 0.
 print_freq = 100 
-fine_tune_encoder = False
+fine_tune_encoder = True
 checkpoint = None
 
 
@@ -246,7 +248,7 @@ def main():
                                     dropout=dropout)
     decoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, decoder.parameters()),
                                             lr=decoder_lr)
-    encoder = Encoder()
+    encoder = EncoderShufflenet()
     encoder.fine_tune(fine_tune_encoder)
     encoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, encoder.parameters()),
                                             lr=encoder_lr) if fine_tune_encoder else None

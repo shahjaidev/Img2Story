@@ -6,10 +6,9 @@ import json
 import numpy as np
 import bcolz 
 import pickle
-from encoder import Encoder
 from utils import create_word_embedding
 
-device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 
@@ -49,10 +48,14 @@ class DecoderWithAttention(nn.Module):
 
         self.embedding = create_word_embedding() 
         self.dropout = nn.Dropout(p=self.dropout)
+        self.tanh = nn.Tanh()
         self.decode_step = nn.LSTMCell(embed_dim + encoder_dim, decoder_dim, bias=True) 
         self.init_h = nn.Linear(encoder_dim, decoder_dim)  
         self.init_c = nn.Linear(encoder_dim, decoder_dim)  
-        self.f_beta = nn.Linear(decoder_dim, encoder_dim)  
+        # self.f_beta = nn.Linear(decoder_dim, encoder_dim)  
+        self.attention_learner_1 = nn.Linear(decoder_dim, 1024)
+        self.attention_learner_2 = nn.Linear(1024, encoder_dim)
+        self.relu = nn.LeakyReLU(0.01) 
         self.sigmoid = nn.Sigmoid()
         self.fc_1 = nn.Linear(decoder_dim, 1000)
         self.fc_2 = nn.Linear(1000, vocab_size)  
@@ -109,12 +112,13 @@ class DecoderWithAttention(nn.Module):
             batch_size_t = sum([l > t for l in decode_lengths])
             attention_weighted_encoding, alpha = self.attention(encoder_out[:batch_size_t],
                                                                 h[:batch_size_t])
-            gate = self.sigmoid(self.f_beta(h[:batch_size_t]))  
+            attention_intermediate_representation = self.relu(self.attention_learner_1(h[:batch_size_t]))
+            gate = self.sigmoid(self.attention_learner_2(attention_intermediate_representation))
             attention_weighted_encoding = gate * attention_weighted_encoding
             h, c = self.decode_step(
                 torch.cat([embeddings[:batch_size_t, t, :], attention_weighted_encoding], dim=1),
                 (h[:batch_size_t], c[:batch_size_t]))  
-            preds = self.fc_2(self.fc_1(self.dropout(h)))
+            preds = self.fc_2(self.tanh(self.fc_1(self.dropout(h))))
             predictions[:batch_size_t, t, :] = preds
             alphas[:batch_size_t, t, :] = alpha
 
