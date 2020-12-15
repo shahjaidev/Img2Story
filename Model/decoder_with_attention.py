@@ -54,13 +54,16 @@ class DecoderWithAttention(nn.Module):
         self.init_c = nn.Linear(encoder_dim, decoder_dim)  
         self.f_beta = nn.Linear(decoder_dim, encoder_dim)  
         self.sigmoid = nn.Sigmoid()
-        self.fc = nn.Linear(decoder_dim, vocab_size)  
+        self.fc_1 = nn.Linear(decoder_dim, 1000)
+        self.fc_2 = nn.Linear(1000, vocab_size)  
         self.init_weights()  
 
     def init_weights(self):
 
-        self.fc.bias.data.fill_(0)
-        self.fc.weight.data.uniform_(-0.1, 0.1)
+        self.fc_1.bias.data.fill_(0)
+        self.fc_2.bias.data.fill_(0)
+        self.fc_1.weight.data.uniform_(-0.1, 0.1)
+        self.fc_2.weight.data.uniform_(-0.1, 0.1)
 
     def load_pretrained_embeddings(self, embeddings):
         self.embedding.weight = nn.Parameter(embeddings)
@@ -111,7 +114,7 @@ class DecoderWithAttention(nn.Module):
             h, c = self.decode_step(
                 torch.cat([embeddings[:batch_size_t, t, :], attention_weighted_encoding], dim=1),
                 (h[:batch_size_t], c[:batch_size_t]))  
-            preds = self.fc(self.dropout(h)) 
+            preds = self.fc_2(self.fc_1(self.dropout(h)))
             predictions[:batch_size_t, t, :] = preds
             alphas[:batch_size_t, t, :] = alpha
 
