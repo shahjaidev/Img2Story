@@ -9,6 +9,7 @@ from torch.nn.utils.rnn import pack_padded_sequence
 from encoder_mobilenet import EncoderMobilenet
 from encoder_shufflenet import EncoderShufflenet
 from encoder_squeezenet import EncoderSqueezenet
+from encoder_squeezenet import EncoderSqueezenet
 from decoder_with_attention import DecoderWithAttention
 from utils import AverageMeter, accuracy
 from nltk.translate.bleu_score import corpus_bleu
