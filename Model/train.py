@@ -306,7 +306,7 @@ def main():
              'decoder': decoder,
              'encoder_optimizer': encoder_optimizer,
              'decoder_optimizer': decoder_optimizer}
-        filename = 'checkpoint_' + data_name + '.pth.tar'
+        filename = 'mobilenet_2_checkpoint_' + data_name + '.pth.tar'
         torch.save(state, filename)
         if is_best:
             torch.save(state, 'BEST_' + filename)

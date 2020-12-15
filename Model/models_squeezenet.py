@@ -1,13 +1,13 @@
 import torch
 from torch import nn
 import torchvision
-from torchvision.models.mobilenet import mobilenet_v2
+
 import json 
 import numpy as np
 import bcolz 
 import pickle
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
 
 class Encoder(nn.Module):
@@ -19,14 +19,12 @@ class Encoder(nn.Module):
         super(Encoder, self).__init__()
         self.enc_image_size = encoded_image_size
         
-
-        mobilenet = torchvision.models.mobilenet_v2(pretrained=True)
-        layers = list(mobilenet.children())[:-1]
-        self.encoder_net = nn.Sequential(*layers,nn.Conv2d(1280, 2048, 1) ) #nn.BatchNorm2d(num_features=2048,eps=1e-05, momentum=0.1, affine=True, track_running_stats=True )
+        shufflenet = torch.hub.load('pytorch/vision:v0.6.0', 'shufflenet_v2_x1_0', pretrained=True)
+        layers = list(squeezenet.children())[:-1]
+        self.encoder_net = nn.Sequential(*layers,nn.Conv2d(1024, 2048, 1), nn.BatchNorm2d(num_features=2048,eps=1e-05, momentum=0.1, affine=True, track_running_stats=True ) ) 
 
         #self.conv1 = nn.Conv2d(1280, 2048, 1)
 
-        # Resize image to fixed size to allow input images of variable size
         self.adaptive_pool = nn.AdaptiveAvgPool2d((encoded_image_size, encoded_image_size))
 
         self.fine_tune()
@@ -39,7 +37,6 @@ class Encoder(nn.Module):
         :return: encoded images
         """
         out = self.encoder_net(images)  # (batch_size, 2048, image_size/32, image_size/32)
-        #out = self.conv1(out)  # (batch_size, 2048, image_size/32, image_size/32)
         out = self.adaptive_pool(out)  # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = out.permute(0, 2, 3, 1)  # (batch_size, encoded_image_size, encoded_image_size, 2048)
         return out
@@ -121,7 +118,7 @@ class DecoderWithAttention(nn.Module):
     Decoder.
     """
 
-    def __init__(self, attention_dim, embed_dim, decoder_dim, vocab_size, encoder_dim=2048, dropout=0.5):
+    def __init__(self, attention_dim, embed_dim, decoder_dim, vocab_size, encoder_dim=2048, dropout=0.3):
         """
         :param attention_dim: size of attention network
         :param embed_dim: embedding size
@@ -161,19 +158,9 @@ class DecoderWithAttention(nn.Module):
         self.fc.weight.data.uniform_(-0.1, 0.1)
 
     def load_pretrained_embeddings(self, embeddings):
-        """
-        Loads embedding layer with pre-trained embeddings.
-
-        :param embeddings: pre-trained embeddings
-        """
         self.embedding.weight = nn.Parameter(embeddings)
 
     def fine_tune_embeddings(self, fine_tune=True):
-        """
-        Allow fine-tuning of embedding layer? (Only makes sense to not-allow if using pre-trained embeddings).
-
-        :param fine_tune: Allow?
-        """
         for p in self.embedding.parameters():
             p.requires_grad = fine_tune
 
@@ -231,8 +218,7 @@ class DecoderWithAttention(nn.Module):
         # then generate a new word in the decoder with the previous word and the attention weighted encoding
         for t in range(max(decode_lengths)):
             batch_size_t = sum([l > t for l in decode_lengths])
-            attention_weighted_encoding, alpha = self.attention(encoder_out[:batch_size_t],
-                                                                h[:batch_size_t])
+            attention_weighted_encoding, alpha = self.attention(encoder_out[:batch_size_t],h[:batch_size_t])
             gate = self.sigmoid(self.f_beta(h[:batch_size_t]))  # gating scalar, (batch_size_t, encoder_dim)
             attention_weighted_encoding = gate * attention_weighted_encoding
             h, c = self.decode_step(
