@@ -1,0 +1,163 @@
+ase==3.19.1
+astroid @ file:///tmp/build/80754af9/astroid_1592495913683/work
+attrs==19.3.0
+backcall==0.1.0
+bcolz==1.2.1
+bleach @ file:///home/conda/feedstock_root/build_artifacts/bleach_1588608214987/work
+blessings==1.7
+bokeh @ file:///tmp/build/80754af9/bokeh_1603297819746/work
+certifi==2020.6.20
+chardet==3.0.4
+click==7.1.2
+cloudpickle @ file:///tmp/build/80754af9/cloudpickle_1598884132938/work
+configparser==5.0.0
+contextvars==2.4
+cycler==0.10.0
+Cython==0.29.20
+cytoolz==0.11.0
+dask @ file:///tmp/build/80754af9/dask-core_1602083700509/work
+decorator==4.4.2
+defusedxml==0.6.0
+distributed @ file:///tmp/build/80754af9/distributed_1602083919371/work
+docker-pycreds==0.4.0
+entrypoints==0.3
+filelock==3.0.12
+Flask==1.1.2
+fsspec @ file:///tmp/build/80754af9/fsspec_1602684995936/work
+future==0.18.2
+fvcore @ file:///home/conda/feedstock_root/build_artifacts/fvcore_1589460330494/work
+gdown==3.12.2
+gitdb==4.0.5
+GitPython==3.1.3
+googledrivedownloader==0.4
+gpustat==0.6.0
+gql==0.2.0
+graphql-core==1.1
+gym==0.17.2
+h5py==2.10.0
+-e git+https://github.com/ScrypticLabs/hand_tracking.git@f1810666f6a98654bd83c9df2845e6ae67c0a8e2#egg=hand_tracking
+HeapDict==1.0.1
+idna==2.9
+imageio==2.8.0
+immutables @ file:///tmp/build/80754af9/immutables_1592425991038/work
+importlib-metadata==1.6.0
+ipdb==0.13.2
+ipykernel @ file:///home/conda/feedstock_root/build_artifacts/ipykernel_1590020193992/work/dist/ipykernel-5.3.0-py3-none-any.whl
+ipython @ file:///home/conda/feedstock_root/build_artifacts/ipython_1588362966620/work
+ipython-genutils==0.2.0
+ipywidgets @ file:///home/conda/feedstock_root/build_artifacts/ipywidgets_1599554010055/work
+isodate==0.6.0
+isort @ file:///tmp/build/80754af9/isort_1602603989581/work
+itsdangerous==1.1.0
+jedi==0.17.0
+Jinja2==2.11.2
+joblib @ file:///tmp/build/80754af9/joblib_1601912903842/work
+jsonschema==3.2.0
+jupyter-client==6.1.3
+jupyter-core==4.6.3
+kiwisolver==1.2.0
+lazy-object-proxy==1.4.3
+llvmlite==0.33.0
+locket==0.2.0
+MarkupSafe==1.1.1
+matplotlib==3.2.1
+mccabe==0.6.1
+mistune==0.8.4
+mkl-fft==1.0.15
+mkl-random==1.1.1
+mkl-service==2.3.0
+mock==4.0.2
+msgpack==1.0.0
+nbconvert==5.6.1
+nbformat==5.0.6
+networkx==2.4
+nltk @ file:///tmp/build/80754af9/nltk_1592496090529/work
+notebook @ file:///home/conda/feedstock_root/build_artifacts/notebook_1588887228799/work
+numba==0.50.0
+numexpr==2.6.8
+numpy==1.18.1
+nvidia-ml-py3==7.352.0
+olefile==0.46
+openai==0.2.6
+opencv-python==4.2.0.34
+packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1589925210001/work
+pandas==1.0.3
+pandocfilters==1.4.2
+parso==0.7.0
+partd==1.1.0
+pathtools==0.1.2
+pexpect==4.8.0
+pickleshare==0.7.5
+Pillow==7.1.2
+pkbar==0.4
+plotly==4.8.2
+plyfile==0.7.2
+portalocker==1.7.0
+prometheus-client @ file:///home/conda/feedstock_root/build_artifacts/prometheus_client_1590412252446/work
+promise==2.3
+prompt-toolkit==3.0.5
+psutil @ file:///tmp/build/80754af9/psutil_1598370257337/work
+ptyprocess==0.6.0
+pygame==1.9.6
+pyglet==1.5.0
+Pygments==2.6.1
+pylint @ file:///tmp/build/80754af9/pylint_1598624022510/work
+pyparsing==2.4.7
+pyrsistent==0.16.0
+PySocks==1.7.1
+python-dateutil==2.8.1
+pytorch3d==0.2.0
+pytz==2020.1
+PyWavelets==1.1.1
+PyYAML==5.3.1
+pyzmq==19.0.1
+rdflib==5.0.0
+regex @ file:///tmp/build/80754af9/regex_1602786665657/work
+requests==2.24.0
+retrying==1.3.3
+-e git+https://github.com/ScrypticLabs/RL_Playground.git@6fd33f9d11ed032272f30a7c23468e4a3270a4ab#egg=rl_playground
+-e git+https://github.com/robintyh1/RL-IP.git@916c69f8fed00435fd894356b6f2441475eca490#egg=rlip
+scikit-image==0.17.2
+scikit-learn==0.23.1
+scipy==1.4.1
+Send2Trash==1.5.0
+sentry-sdk==0.15.1
+shortuuid==1.0.1
+six==1.14.0
+smmap==3.0.4
+sortedcontainers==2.2.2
+subprocess32==3.5.4
+tables==3.6.1
+tabulate==0.8.7
+tblib @ file:///tmp/build/80754af9/tblib_1597928476713/work
+termcolor==1.1.0
+terminado==0.8.3
+testpath==0.4.4
+threadpoolctl==2.1.0
+tifffile==2020.5.25
+toml @ file:///tmp/build/80754af9/toml_1592853716807/work
+toolz @ file:///tmp/build/80754af9/toolz_1601054250827/work
+torch==1.5.0
+torch-cluster==1.5.4
+torch-geometric==1.5.0
+torch-scatter==2.0.4
+torch-sparse==0.6.5
+torch-spline-conv==1.2.0
+torchsummary==1.5.1
+torchvision==0.6.0a0+82fd1c8
+tornado==6.0.4
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1588513834538/work
+traitlets==4.3.3
+typed-ast==1.4.1
+typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1598376058250/work
+urllib3==1.25.9
+wandb==0.9.1
+watchdog==0.10.2
+wcwidth==0.1.9
+webencodings==0.5.1
+Werkzeug==1.0.1
+widgetsnbextension @ file:///home/conda/feedstock_root/build_artifacts/widgetsnbextension_1594164342644/work
+wrapt==1.11.2
+yacs==0.1.6
+zict==2.0.0
+zipp==3.1.0
