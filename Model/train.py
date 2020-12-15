@@ -5,7 +5,9 @@ import torch.utils.data
 import torchvision.transforms as transforms
 from torch import nn
 from torch.nn.utils.rnn import pack_padded_sequence
-from models import Encoder, DecoderWithAttention
+# from models import Encoder, DecoderWithAttention
+from encoder import Encoder
+from decoder_with_attention import DecoderWithAttention
 from utils import AverageMeter, accuracy
 from nltk.translate.bleu_score import corpus_bleu
 import torch
@@ -61,7 +63,7 @@ emb_dim = 300
 attention_dim = 300  
 decoder_dim = 300  
 dropout = 0.5
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 cudnn.benchmark = True  
 
 start_epoch = 0

@@ -6,71 +6,11 @@ import json
 import numpy as np
 import bcolz 
 import pickle
+from encoder import Encoder
+from utils import create_word_embedding
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
-
-
-def create_word_embedding():
-    # using word2vec
-    vectors = bcolz.open(f'./Glove/6B.300.dat')[:]
-    words = pickle.load(open(f'./Glove/6B.300_words.pkl', 'rb'))
-    word2idx = pickle.load(open(f'./Glove/6B.300_idx.pkl', 'rb'))
-
-    glove = {w: vectors[word2idx[w]] for w in words}
-    with open('./caption_data/WORDMAP_coco_5_cap_per_img_5_min_word_freq.json', 'r') as j:
-        target_vocab = json.load(j)
-    matrix_len = len(target_vocab)
-    weights_matrix = np.zeros((matrix_len, 300))
-    words_found = 0
-
-    for i, word in enumerate(target_vocab):
-        word = word.lower()
-        try: 
-            weights_matrix[i] = glove[word]
-            words_found += 1
-        except KeyError:
-            weights_matrix[i] = np.random.normal(scale=0.6, size=(300, ))
-
-    emb_layer = nn.Embedding(len(target_vocab),300)
-    weights_matrix = torch.tensor(weights_matrix)
-    emb_layer.load_state_dict({'weight': weights_matrix})
-
-    return emb_layer
-
-
-class Encoder(nn.Module):
-
-    def __init__(self, encoded_image_size=14):
-        super(Encoder, self).__init__()
-        self.enc_image_size = encoded_image_size
-        
-
-        mobilenet = torchvision.models.mobilenet_v2(pretrained=True)
-        layers = list(mobilenet.children())[:-1]
-        self.encoder_net = nn.Sequential(*layers,nn.Conv2d(1280, 2048, 1) ) #nn.BatchNorm2d(num_features=2048,eps=1e-05, momentum=0.1, affine=True, track_running_stats=True )
-
-        #self.conv1 = nn.Conv2d(1280, 2048, 1)
-
-        self.adaptive_pool = nn.AdaptiveAvgPool2d((encoded_image_size, encoded_image_size))
-
-        self.fine_tune()
-
-    def forward(self, images):
-        out = self.encoder_net(images)  
-        #out = self.conv1(out)  # (batch_size, 2048, image_size/32, image_size/32)
-        out = self.adaptive_pool(out) # 2048 filters 
-        out = out.permute(0, 2, 3, 1)  
-        return out
-
-    def fine_tune(self, fine_tune=True):
-
-        for p in self.encoder_net.parameters():
-            p.requires_grad = False
-        # If fine-tuning, only fine-tune convolutional blocks 2 through 4
-        for c in list(self.encoder_net.children())[5:]:
-            for p in c.parameters():
-                p.requires_grad = fine_tune
 
 
 class Attention(nn.Module):
@@ -91,8 +31,6 @@ class Attention(nn.Module):
         attention_weighted_encoding = (encoder_out * alpha.unsqueeze(2)).sum(dim=1)  
 
         return attention_weighted_encoding, alpha
-
-
 
 
 class DecoderWithAttention(nn.Module):
