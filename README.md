@@ -63,7 +63,8 @@ As mentioned before, our image captioning is based on the work mentioned of the 
 
 Notably, our work differs from the show, attend and tell in the following ways: 
 
-1) We use different encoders in order to train our model - resnet, squeezenet, mobilenet, shufflenet, wide_resenet. The results and the intuition behind using some of these models is described in the report 
+1) We finetuned different encoders in order to train our model - Resnet, Wide ResNet, ResNeSt, DenseNet, Squeezenet, Mobilenet, Shufflenet. Our motivation for training Squeezenet, Mobilenet, Shufflenet: These models are highly compact, with a relatively low parameter space. We wanted to experiment and train such nets which would give us the ability to run most of our Img2Story model on device (on the edge) in exchange for slightly lower performance.
+The results (BLEU score) along with training hyperparameters are described in the report.
 
 2) We use glove word embedding for the words in the decoder 
 
@@ -93,8 +94,8 @@ Once this has been done, all that you need to do is run the flask app.
 
 `python -m flask run`
 
-**NOTE: You will also need to provide your own GPT3 api key in `gpt3_functions.py`**. GPT3 is not publicly available right now. You can request for on [openAI](https://openai.com/blog/openai-api/)
+**NOTE: You will also need to provide your own GPT3 api key in `gpt3_functions.py`**. GPT3 is not publicly available right now. You can request one at [openAI](https://openai.com/blog/openai-api/) or if you wish to run the entire system locally, please reach out to me (Jaidev, js5161@columbia.edu) and I can temporarily lend you mine.
 
 ## Final Demo 
 
-A working final demo of the end to end full stack model after training can be found in [this youtube video](https://youtu.be/Fu52ATk7yq4)
+A working final demo of the end to end full stack system after training can be found in [this youtube video](https://youtu.be/Fu52ATk7yq4)
