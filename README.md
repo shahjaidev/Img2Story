@@ -70,7 +70,7 @@ The results (BLEU score) along with training hyperparameters are described in th
 
 3) The paper mentions soft attention and hard attention - we use soft attention just because it is differentiable. 
 
-4) We enable our LSTm cell output layer as well as Attenion model weight update layer to learn more complicated function approximators by introducing additional fully connected layers 
+4) We enable our LSTM cell output layer as well as Attenion model weight update layer to learn more complicated function approximators by introducing additional fully connected layers 
 
 There are several files in the `Model` directory. On a high level, 
 `decoder_with_attention.py` contains the code to create the decoder module. 
@@ -94,8 +94,12 @@ Once this has been done, all that you need to do is run the flask app.
 
 `python -m flask run`
 
-**NOTE: You will also need to provide your own GPT3 api key in `gpt3_functions.py`**. GPT3 is not publicly available right now. You can request one at [openAI](https://openai.com/blog/openai-api/) or if you wish to run the entire system locally, please reach out to me (Jaidev, js5161@columbia.edu) and I can temporarily lend you mine.
+**NOTE: You will also need to provide your own GPT3 api key in `gpt3_functions.py`**. GPT3 is not publicly available right now. You can request one at [openAI](https://openai.com/blog/openai-api/) or if you wish to run the entire system locally, please reach out to me (Jaidev, js5161@columbia.edu) and I can temporarily lend you mine. We have made available, as an alternative, a live publicly hosted version of our system hosted on my Cloud GPU (Link in next Section)
 
 ## Final Demo 
 
-A working final demo of the end to end full stack system after training can be found in [this youtube video](https://youtu.be/Fu52ATk7yq4)
+Public url: http://3e3952d5b604.ngrok.io/
+A working final demo video of the end to end full stack system after training can be found in [this youtube video](https://youtu.be/Fu52ATk7yq4)
+Team Presentation Video: https://youtu.be/CmsU3g_6baM
+Slides: https://docs.google.com/presentation/d/16LKtssldO2Xm4qC24-YURQKGYFyw_61KUHK77y_VH88/edit?usp=sharing
+
