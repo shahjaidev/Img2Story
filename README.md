@@ -8,6 +8,9 @@ into a GPT3 model, which then generates the corresponding story.
 
 ![Alt text](SavedStories/dog_story_screenshot.jpeg?raw=true "A generated caption and story")
 
+![Alt text](SavedStories/frisbee_story.jpeg?raw=true )
+
+
 The user is allowed to 1) spearhead the story by feeding in a new image 2) continue the story 3) Continue the story by uploading a new image and thus changing the direction of the story  4) Use your own text to change the direction of the story 
 
 ## Repository
