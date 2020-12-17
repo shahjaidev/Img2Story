@@ -66,11 +66,11 @@ Notably, our work differs from the show, attend and tell in the following ways:
 1) We finetuned different encoders in order to train our model - Resnet, Wide ResNet, ResNeSt, DenseNet, Squeezenet, Mobilenet, Shufflenet. Our motivation for training Squeezenet, Mobilenet, Shufflenet: These models are highly compact, with a relatively low parameter space. We wanted to experiment and train such nets which would give us the ability to run most of our Img2Story model on device (on the edge) in exchange for slightly lower performance.
 The results (BLEU score) along with training hyperparameters are described in the report.
 
-2) We use glove word embedding for the words in the decoder 
+2) We use glove word embeddings to initilize the embedding matrix in the LSTM cell of the decoder 
 
 3) The paper mentions soft attention and hard attention - we use soft attention just because it is differentiable. 
 
-4) At the time of inference, we make use of beam search in order to get the caption. 
+4) We enable our LSTm cell output layer as well as Attenion model weight update layer to learn more complicated function approximators by introducing additional fully connected layers 
 
 There are several files in the `Model` directory. On a high level, 
 `decoder_with_attention.py` contains the code to create the decoder module. 
