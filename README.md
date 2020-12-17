@@ -104,7 +104,7 @@ Public url: http://3e3952d5b604.ngrok.io/
 
 A working final demo video of the end to end full stack system after training can be found in [this youtube video](https://youtu.be/Fu52ATk7yq4)
 
-Team Presentation Video: https://youtu.be/CmsU3g_6baM
+Team Presentation Video: https://youtu.be/fwgrLuLqBe0
 
 Slides: https://docs.google.com/presentation/d/16LKtssldO2Xm4qC24-YURQKGYFyw_61KUHK77y_VH88/edit?usp=sharing
 
