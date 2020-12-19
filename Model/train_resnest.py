@@ -9,7 +9,7 @@ from torch.nn.utils.rnn import pack_padded_sequence
 from encoder_mobilenet import EncoderMobilenet
 from encoder_shufflenet import EncoderShufflenet
 from encoder_squeezenet import EncoderSqueezenet
-from encoder_squeezenet import EncoderSqueezenet
+from encoder_resNeSt import EncoderResNeSt
 from decoder_with_attention import DecoderWithAttention
 from utils import AverageMeter, accuracy
 from nltk.translate.bleu_score import corpus_bleu
@@ -249,7 +249,7 @@ def main():
                                     dropout=dropout)
     decoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, decoder.parameters()),
                                             lr=decoder_lr)
-    encoder = EncoderShufflenet()
+    encoder = EncoderResNeSt()
     encoder.fine_tune(fine_tune_encoder)
     encoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, encoder.parameters()),
                                             lr=encoder_lr) if fine_tune_encoder else None

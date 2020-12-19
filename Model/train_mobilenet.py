@@ -58,7 +58,7 @@ class CaptionDataset(Dataset):
     def __len__(self):
         return self.dataset_size
 
-data_folder = './caption_data'  
+data_folder = '/root/raghav/dl4cv/tutorial/caption_data' 
 data_name = 'coco_5_cap_per_img_5_min_word_freq'
 
 emb_dim = 300  

@@ -53,12 +53,12 @@ class DecoderWithAttention(nn.Module):
         self.init_h = nn.Linear(encoder_dim, decoder_dim)  
         self.init_c = nn.Linear(encoder_dim, decoder_dim)  
         # self.f_beta = nn.Linear(decoder_dim, encoder_dim)  
-        self.attention_learner_1 = nn.Linear(decoder_dim, 1024)
-        self.attention_learner_2 = nn.Linear(1024, encoder_dim)
+        self.attention_learner_1 = nn.Linear(decoder_dim, 512)
+        self.attention_learner_2 = nn.Linear(512, encoder_dim)
         self.relu = nn.LeakyReLU(0.01) 
         self.sigmoid = nn.Sigmoid()
-        self.fc_1 = nn.Linear(decoder_dim, 1000)
-        self.fc_2 = nn.Linear(1000, vocab_size)  
+        self.fc_1 = nn.Linear(decoder_dim, 512)
+        self.fc_2 = nn.Linear(512, vocab_size)  
         self.init_weights()  
 
     def init_weights(self):

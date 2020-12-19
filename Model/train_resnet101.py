@@ -1,3 +1,4 @@
+from encoder_resnet import EncoderResnet101
 import time
 import torch.backends.cudnn as cudnn
 import torch.optim
@@ -5,11 +6,6 @@ import torch.utils.data
 import torchvision.transforms as transforms
 from torch import nn
 from torch.nn.utils.rnn import pack_padded_sequence
-# from models import Encoder, DecoderWithAttention
-from encoder_mobilenet import EncoderMobilenet
-from encoder_shufflenet import EncoderShufflenet
-from encoder_squeezenet import EncoderSqueezenet
-from encoder_squeezenet import EncoderSqueezenet
 from decoder_with_attention import DecoderWithAttention
 from utils import AverageMeter, accuracy
 from nltk.translate.bleu_score import corpus_bleu
@@ -59,14 +55,14 @@ class CaptionDataset(Dataset):
     def __len__(self):
         return self.dataset_size
 
-data_folder = '/root/raghav/dl4cv/tutorial/caption_data'  
+data_folder = '/root/raghav/dl4cv/tutorial/caption_data'
 data_name = 'coco_5_cap_per_img_5_min_word_freq'
 
 emb_dim = 300  
 attention_dim = 300  
 decoder_dim = 300  
-dropout = 0.5
-device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+dropout = 0.4
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 cudnn.benchmark = True  
 
 start_epoch = 0
@@ -111,8 +107,6 @@ def train(train_loader, encoder, decoder, criterion, encoder_optimizer, decoder_
 
         # Calculate loss
         loss = criterion(scores, targets)
-
-        # Add doubly stochastic attention regularization
         loss += alpha_c * ((1. - alphas.sum(dim=1)) ** 2).mean()
 
         # Back prop.
@@ -133,7 +127,6 @@ def train(train_loader, encoder, decoder, criterion, encoder_optimizer, decoder_
                         if param.grad is not None:
                             param.grad.data.clamp_(-grad_clip, grad_clip)
 
-        # Update weights
         decoder_optimizer.step()
         if encoder_optimizer is not None:
             encoder_optimizer.step()
@@ -234,25 +227,39 @@ def validate(val_loader, encoder, decoder, criterion):
     return bleu4
 
 def main():
-
+    encoder = EncoderResnet101()
+    
+    encoder.set_finetune_parameters(True)
     global best_bleu4, epochs_since_improvement, checkpoint, start_epoch, fine_tune_encoder, data_name, word_map
 
-    # Read word map
     word_map_file = os.path.join(data_folder, 'WORDMAP_' + data_name + '.json')
     with open(word_map_file, 'r') as j:
         word_map = json.load(j)
 
+    
     decoder = DecoderWithAttention(attention_dim=attention_dim,
-                                    embed_dim=emb_dim,
-                                    decoder_dim=decoder_dim,
-                                    vocab_size=len(word_map),
-                                    dropout=dropout)
+                                embed_dim=emb_dim,
+                                decoder_dim=decoder_dim,
+                                vocab_size=len(word_map),
+                                dropout=dropout)
+
     decoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, decoder.parameters()),
                                             lr=decoder_lr)
-    encoder = EncoderShufflenet()
-    encoder.fine_tune(fine_tune_encoder)
-    encoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, encoder.parameters()),
-                                            lr=encoder_lr) if fine_tune_encoder else None
+
+    encoder.to(device)
+    decoder.to(device)
+
+
+
+    if fine_tune_encoder:
+        encoder_optimizer= None
+    else:
+        params_li=[]
+        for name, param in encoder.named_parameters():
+           if param.requires_grad == True:
+                params_li.append(param)
+                
+        encoder_optimizer = torch.optim.Adam(params=params_li,lr=encoder_lr)
 
 
     decoder = decoder.to(device)
@@ -311,7 +318,7 @@ def main():
              'decoder': decoder,
              'encoder_optimizer': encoder_optimizer,
              'decoder_optimizer': decoder_optimizer}
-        filename = 'mobilenet_2_checkpoint_' + data_name + '.pth.tar'
+        filename = 'shuffle_checkpoint_' + data_name + '.pth.tar'
         torch.save(state, filename)
         if is_best:
             torch.save(state, 'BEST_' + filename)

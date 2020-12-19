@@ -56,7 +56,7 @@ class CaptionDataset(Dataset):
     def __len__(self):
         return self.dataset_size
 
-data_folder = './caption_data'  
+data_folder = 'root/raghav/dl4cv/tutorial/caption_data'  
 data_name = 'coco_5_cap_per_img_5_min_word_freq'
 
 emb_dim = 300  
@@ -229,23 +229,30 @@ def validate(val_loader, encoder, decoder, criterion):
     return bleu4
 
 def main():
+    
+    encoder = EncoderSqueezenet()
+    encoder.set_finetune_parameters(True)
 
     global best_bleu4, epochs_since_improvement, checkpoint, start_epoch, fine_tune_encoder, data_name, word_map
 
-    # Read word map
     word_map_file = os.path.join(data_folder, 'WORDMAP_' + data_name + '.json')
     with open(word_map_file, 'r') as j:
         word_map = json.load(j)
 
+    
     decoder = DecoderWithAttention(attention_dim=attention_dim,
-                                    embed_dim=emb_dim,
-                                    decoder_dim=decoder_dim,
-                                    vocab_size=len(word_map),
-                                    dropout=dropout)
+                                embed_dim=emb_dim,
+                                decoder_dim=decoder_dim,
+                                vocab_size=len(word_map),
+                                dropout=dropout)
+
     decoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, decoder.parameters()),
                                             lr=decoder_lr)
-    encoder = EncoderSqueezenet()
-    encoder.fine_tune(fine_tune_encoder)
+
+
+
+
+
     if fine_tune_encoder:
         encoder_optimizer= None
     else:
@@ -317,7 +324,6 @@ def main():
         torch.save(state, filename)
         if is_best:
             torch.save(state, 'BEST_' + filename)
-
 
 
 if __name__ == '__main__':
